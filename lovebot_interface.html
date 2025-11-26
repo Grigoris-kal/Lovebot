@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lovebot - Your AI Relationship Assistant</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #ff6b6b, #ff8e8e, #ffafaf);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px 0;
+            width: 100%;
+        }
+
+        .logo {
+            max-width: 600px;
+            width: 100%;
+            height: auto;
+            margin-bottom: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            margin-bottom: 10px;
+        }
+
+        .tagline {
+            font-size: 1.5rem;
+            color: #fff;
+            margin-bottom: 30px;
+            font-weight: 300;
+        }
+
+        .car-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            margin: 30px 0;
+        }
+
+        .car-image {
+            max-width: 800px;
+            width: 100%;
+            height: auto;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            margin-bottom: 40px;
+        }
+
+        .chat-container {
+            display: flex;
+            gap: 20px;
+            width: 100%;
+            max-width: 1000px;
+            margin-bottom: 40px;
+        }
+
+        .input-box, .response-box {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-box h3, .response-box h3 {
+            color: #ff6b6b;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        .question-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ffafaf;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            resize: vertical;
+            min-height: 150px;
+            flex: 1;
+        }
+
+        .question-input::placeholder {
+            color: #aaa;
+            font-style: italic;
+            text-align: center;
+            line-height: 150px;
+        }
+
+        .response-display {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ffafaf;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            background: #f9f9f9;
+            min-height: 200px;
+            flex: 1;
+            overflow-y: auto;
+            white-space: pre-line;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .submit-button, .speak-button {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .submit-button:hover, .speak-button:hover {
+            background: #ff5252;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 107, 107, 0.6);
+        }
+
+        .speak-button {
+            background: #6b8cff;
+            box-shadow: 0 5px 15px rgba(107, 140, 255, 0.4);
+        }
+
+        .speak-button:hover {
+            background: #5275ff;
+            box-shadow: 0 8px 20px rgba(107, 140, 255, 0.6);
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            color: #ff6b6b;
+            font-style: italic;
+            margin: 10px 0;
+        }
+
+        .backend-status {
+            text-align: center;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+
+        .status-connected {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .status-disconnected {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: white;
+            width: 100%;
+            font-size: 0.9rem;
+            margin-top: auto;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .logo {
+                max-width: 90%;
+            }
+
+            .car-image {
+                max-width: 90%;
+            }
+
+            .chat-container {
+                flex-direction: column;
+            }
+
+            .input-box, .response-box {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="Love_bot_logo.jpg" alt="Lovebot Logo" class="logo">
+            <h1>Lovebot</h1>
+            <p class="tagline">Your AI-powered relationship assistant</p>
+        </header>
+
+        <div class="backend-status status-disconnected" id="backendStatus">
+            🔄 Backend: Checking connection...
+        </div>
+
+        <div class="car-section">
+            <img src="your_car_image.jpg" alt="Lovebot Car" class="car-image">
+
+            <div class="chat-container">
+                <div class="input-box">
+                    <h3>Your Question</h3>
+                    <textarea class="question-input" placeholder="Ready for some love creation?"></textarea>
+                    <div class="loading" id="loadingIndicator">Lovebot is processing your query... *databases whirring dramatically*</div>
+                    <div class="button-container">
+                        <button class="submit-button">Ask Lovebot</button>
+                    </div>
+                </div>
+
+                <div class="response-box">
+                    <h3>Lovebot's Response</h3>
+                    <div class="response-display">INITIALIZING LOVEBOT... THE ULTIMATE FLIRTING DATABASE!
+
+*privacy protocols engage*
+
+Greetings, anonymous human! I am Lovebot, and your privacy is my top priority!
+
+I contain multitudes:
+🔮 2,000 years of romantic wisdom
+💫 Global flirting customs from 15+ cultures
+🦚 15 animal courtship rituals
+🎵 20 iconic love songs
+🎬 15 cheesy romantic movies
+🧠 15 psychological research concepts
+📜 20 timeless folk sayings
+🌟 ...and my own irresistibly brilliant, incomparable genius!
+
+What romantic query shall we optimize today?</div>
+                    <div class="button-container">
+                        <button class="speak-button">
+                            <span>🔊</span> Speak Response
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>&copy; 2025 Lovebot. All rights reserved. | Designed with 💬 for better relationships</p>
+            <p>Powered by Gemini AI + Free Browser TTS</p>
+        </footer>
+    </div>
+
+    <script>
+        // Free TTS using Web Speech API - ABEO VOICE PREFERENCE
+        function speakText(text) {
+            // Check if browser supports SpeechSynthesis
+            if (!('speechSynthesis' in window)) {
+                alert('Your browser does not support text-to-speech. Please try Chrome, Edge, or Safari.');
+                return;
+            }
+
+            const speakButton = document.querySelector('.speak-button');
+            const originalText = speakButton.innerHTML;
+            
+            // Stop any ongoing speech
+            window.speechSynthesis.cancel();
+
+            // Create speech synthesis
+            const utterance = new SpeechSynthesisUtterance(text);
+            
+            // Configure voice settings
+            utterance.rate = 1.0;    // Speaking rate
+            utterance.pitch = 1.0;   // Speaking pitch
+            utterance.volume = 1.0;  // Volume
+
+            // Try to find ABEO voice specifically
+            const voices = speechSynthesis.getVoices();
+            const abeoVoice = voices.find(voice => 
+                voice.name.includes('Abeo') || 
+                voice.name.includes('Nigeria') ||
+                voice.lang.includes('en-NG')
+            );
+            
+            if (abeoVoice) {
+                utterance.voice = abeoVoice;
+                console.log("🎤 Using Abeo voice:", abeoVoice.name);
+            } else {
+                // Fallback to any English voice
+                const englishVoices = voices.filter(voice => voice.lang.includes('en'));
+                if (englishVoices.length > 0) {
+                    utterance.voice = englishVoices[0];
+                }
+            }
+
+            // Update button state
+            speakButton.innerHTML = '<span>🔊</span> Speaking...';
+            speakButton.disabled = true;
+
+            // Speech events
+            utterance.onend = function() {
+                speakButton.innerHTML = originalText;
+                speakButton.disabled = false;
+            };
+
+            utterance.onerror = function() {
+                speakButton.innerHTML = originalText;
+                speakButton.disabled = false;
+                alert('Speech synthesis failed. Please try again.');
+            };
+
+            // Start speaking
+            window.speechSynthesis.speak(utterance);
+        }
+
+        // Check backend connection
+        async function checkBackendConnection() {
+            try {
+                const response = await fetch('http://localhost:5000/health');
+                const data = await response.json();
+
+                const statusElement = document.getElementById('backendStatus');
+                statusElement.textContent = '✅ Backend: Connected and ready!';
+                statusElement.className = 'backend-status status-connected';
+                return true;
+            } catch (error) {
+                const statusElement = document.getElementById('backendStatus');
+                statusElement.textContent = '❌ Backend: Not connected.';
+                statusElement.className = 'backend-status status-disconnected';
+                return false;
+            }
+        }
+
+        // Get AI response from Gemini
+        async function getAIResponse(question) {
+            try {
+                const response = await fetch('http://localhost:5000/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ message: question })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    return result.response;
+                } else {
+                    throw new Error(result.error || 'Failed to get AI response');
+                }
+            } catch (error) {
+                console.error('AI Response Error:', error);
+                return "I apologize, but my brilliant AI systems are currently optimizing themselves! Even genius needs occasional maintenance!";
+            }
+        }
+
+        // Response simulation with API call
+        document.querySelector('.submit-button').addEventListener('click', async function() {
+            const questionInput = document.querySelector('.question-input');
+            const responseDisplay = document.querySelector('.response-display');
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            const question = questionInput.value.trim();
+
+            if (question === '') {
+                responseDisplay.textContent = "Please ask me a question about love or relationships! Even my brilliant mind needs something to work with!";
+                return;
+            }
+
+            // Show loading indicator
+            loadingIndicator.style.display = 'block';
+            this.disabled = true;
+
+            try {
+                // Get AI response from Gemini
+                const response = await getAIResponse(question);
+                responseDisplay.textContent = response;
+
+                // Clear the input
+                questionInput.value = '';
+            } catch (error) {
+                responseDisplay.textContent = "I apologize, but my genius systems are currently optimizing themselves! Even brilliance needs occasional maintenance!";
+                console.error("API Error:", error);
+            } finally {
+                // Hide loading indicator
+                loadingIndicator.style.display = 'none';
+                this.disabled = false;
+            }
+        });
+
+        // Manual speak button
+        document.querySelector('.speak-button').addEventListener('click', function() {
+            const responseDisplay = document.querySelector('.response-display');
+            const responseText = responseDisplay.textContent;
+
+            if (responseText && !responseText.includes("INITIALIZING LOVEBOT")) {
+                speakText(responseText);
+            } else {
+                alert("Please ask a question first to experience my brilliant insights!");
+            }
+        });
+
+        // Add visual feedback for the textarea
+        document.querySelector('.question-input').addEventListener('focus', function() {
+            this.style.borderColor = '#ff6b6b';
+            this.style.boxShadow = '0 0 10px rgba(255, 107, 107, 0.3)';
+        });
+
+        document.querySelector('.question-input').addEventListener('blur', function() {
+            this.style.borderColor = '#ffafaf';
+            this.style.boxShadow = 'none';
+        });
+
+        // Check backend connection on load and every 30 seconds
+        window.addEventListener('load', function() {
+            checkBackendConnection();
+            setInterval(checkBackendConnection, 30000);
+        });
+    </script>
+</body>
+</html>
