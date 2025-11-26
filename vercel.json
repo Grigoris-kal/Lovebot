@@ -4,9 +4,17 @@
     {
       "src": "lovebot_interface.html",
       "use": "@vercel/static"
+    },
+    {
+      "src": "*.jpg", 
+      "use": "@vercel/static"
     }
   ],
   "routes": [
+    {
+      "src": "/(.*\\.jpg$)",
+      "dest": "/$1"
+    },
     {
       "src": "/(.*)",
       "dest": "/lovebot_interface.html"
