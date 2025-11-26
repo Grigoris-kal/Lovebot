@@ -1,15 +1,5 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "**/*.py",
-      "use": "@vercel/python"
-    },
-    {
-      "src": "**/*.html",
-      "use": "@vercel/static"
-    }
-  ],
   "routes": [
     {
       "src": "/",
@@ -26,10 +16,6 @@
     {
       "src": "/generate-speech",
       "dest": "/lovebot_backend.py"
-    },
-    {
-      "src": "/debug-keys",
-      "dest": "/debug_keys.py"
     },
     {
       "src": "/(.*)",
