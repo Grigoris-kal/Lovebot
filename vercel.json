@@ -2,17 +2,13 @@
   "version": 2,
   "builds": [
     {
-      "src": "lovebot_interface.html",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "*.jpg", 
+      "src": "**/*",
       "use": "@vercel/static"
     }
   ],
   "routes": [
     {
-      "src": "/(.*\\.jpg$)",
+      "src": "/(.*\\.(jpg|jpeg|png|gif|svg|css|js))$",
       "dest": "/$1"
     },
     {
