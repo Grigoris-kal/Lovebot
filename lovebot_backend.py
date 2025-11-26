@@ -237,8 +237,9 @@ def generate_speech():
         clean_text = clean_text_for_speech(clean_text)
         
         # Call ElevenLabs API (server-side - secure)
+        # Call ElevenLabs API (server-side - secure)
         response = requests.post(
-            'https://api.elevenlabs.io/v1/text-to-speech/YOUR_dDpKZ6xv1gpboV4okVbc_HERE',  # ← REPLACE WITH YOUR VOICE ID
+            'https://api.elevenlabs.io/v1/text-to-speech',  # ← REMOVED VOICE ID FROM URL
             headers={
                 'Accept': 'audio/mpeg',
                 'Content-Type': 'application/json',
@@ -250,7 +251,8 @@ def generate_speech():
                 "voice_settings": {
                     "stability": 0.3,
                     "similarity_boost": 0.7
-                }
+                },
+                "voice_id": "dDpKZ6xv1gpboV4okVbc"  # ← VOICE ID MOVED HERE
             },
             timeout=30
         )
@@ -311,3 +313,4 @@ def clear_memory():
 
 if __name__ == '__main__':
     app.run(debug=True, host='localhost', port=5000)
+
