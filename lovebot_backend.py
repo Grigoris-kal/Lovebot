@@ -252,7 +252,7 @@ def generate_speech():
                     "stability": 0.3,
                     "similarity_boost": 0.7
                 },
-                "voice_id": "dDpKZ6xv1gpboV4okVbc"  # ← VOICE ID MOVED HERE
+                "voice_id": "5Q0t7uMcjvnagumLfvZi"  # ← VOICE ID MOVED HERE
             },
             timeout=30
         )
@@ -313,4 +313,5 @@ def clear_memory():
 
 if __name__ == '__main__':
     app.run(debug=True, host='localhost', port=5000)
+
 
