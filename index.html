@@ -295,141 +295,75 @@ What romantic query shall we optimize today?</div>
 
     <script>
         // Free TTS using Web Speech API - ABEO VOICE PREFERENCE
-async function speakText(text) {
-    const speakButton = document.querySelector('.speak-button');
-    const originalText = speakButton.innerHTML;
-    
-    try {
-        // Call YOUR backend (secure) for ElevenLabs TTS
-        const response = await fetch('https://lovebot-xyh8.vercel.app/generate-speech', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ text: text })
-        });
+        async function speakText(text) {
+            const speakButton = document.querySelector('.speak-button');
+            const originalText = speakButton.innerHTML;
+            
+            try {
+                // Call YOUR backend (secure) for ElevenLabs TTS
+                const response = await fetch('https://lovebot-xyh8.vercel.app/generate-speech', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ text: text })
+                });
 
-        if (!response.ok) {
-            throw new Error('TTS service unavailable');
+                if (!response.ok) {
+                    throw new Error('TTS service unavailable');
+                }
+                
+                // Play the audio from ElevenLabs
+                const audioBlob = await response.blob();
+                const audioUrl = URL.createObjectURL(audioBlob);
+                const audio = new Audio(audioUrl);
+                
+                speakButton.innerHTML = '<span>🔊</span> Speaking...';
+                speakButton.disabled = true;
+                
+                audio.play();
+                
+                audio.onended = function() {
+                    speakButton.innerHTML = originalText;
+                    speakButton.disabled = false;
+                };
+                
+            } catch (error) {
+                console.error('ElevenLabs TTS error:', error);
+                speakButton.innerHTML = originalText;
+                speakButton.disabled = false;
+                // Fallback to browser TTS if ElevenLabs fails
+                fallbackTTS(text);
+            }
         }
-        
-        // Play the audio from ElevenLabs
-        const audioBlob = await response.blob();
-        const audioUrl = URL.createObjectURL(audioBlob);
-        const audio = new Audio(audioUrl);
-        
-        speakButton.innerHTML = '<span>🔊</span> Speaking...';
-        speakButton.disabled = true;
-        
-        audio.play();
-        
-        audio.onended = function() {
-            speakButton.innerHTML = originalText;
-            speakButton.disabled = false;
-        };
-        
-    } catch (error) {
-        console.error('ElevenLabs TTS error:', error);
-        speakButton.innerHTML = originalText;
-        speakButton.disabled = false;
-        // Fallback to browser TTS if ElevenLabs fails
-        fallbackTTS(text);
-    }
-}
 
-// Fallback to browser TTS (original function)
-function fallbackTTS(text) {
-    if (!('speechSynthesis' in window)) {
-        alert('Text-to-speech not available');
-        return;
-    }
-    
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.rate = 1.0;
-    utterance.pitch = 1.0;
-    utterance.volume = 1.0;
-    
-    // Try to find ABEO voice specifically
-    const voices = speechSynthesis.getVoices();
-    const abeoVoice = voices.find(voice => 
-        voice.name.includes('Abeo') || 
-        voice.name.includes('Nigeria') ||
-        voice.lang.includes('en-NG')
-    );
-    
-    if (abeoVoice) {
-        utterance.voice = abeoVoice;
-    }
-    
-    window.speechSynthesis.speak(utterance);
-}async function speakText(text) {
-    const speakButton = document.querySelector('.speak-button');
-    const originalText = speakButton.innerHTML;
-    
-    try {
-        // Call YOUR backend (secure) for ElevenLabs TTS
-        const response = await fetch('https://lovebot-xyh8.vercel.app/generate-speech', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ text: text })
-        });
-
-        if (!response.ok) {
-            throw new Error('TTS service unavailable');
+        // Fallback to browser TTS (original function)
+        function fallbackTTS(text) {
+            if (!('speechSynthesis' in window)) {
+                alert('Text-to-speech not available');
+                return;
+            }
+            
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.rate = 1.0;
+            utterance.pitch = 1.0;
+            utterance.volume = 1.0;
+            
+            // Try to find ABEO voice specifically
+            const voices = speechSynthesis.getVoices();
+            const abeoVoice = voices.find(voice => 
+                voice.name.includes('Abeo') || 
+                voice.name.includes('Nigeria') ||
+                voice.lang.includes('en-NG')
+            );
+            
+            if (abeoVoice) {
+                utterance.voice = abeoVoice;
+            }
+            
+            window.speechSynthesis.speak(utterance);
         }
-        
-        // Play the audio from ElevenLabs
-        const audioBlob = await response.blob();
-        const audioUrl = URL.createObjectURL(audioBlob);
-        const audio = new Audio(audioUrl);
-        
-        speakButton.innerHTML = '<span>🔊</span> Speaking...';
-        speakButton.disabled = true;
-        
-        audio.play();
-        
-        audio.onended = function() {
-            speakButton.innerHTML = originalText;
-            speakButton.disabled = false;
-        };
-        
-    } catch (error) {
-        console.error('ElevenLabs TTS error:', error);
-        speakButton.innerHTML = originalText;
-        speakButton.disabled = false;
-        // Fallback to browser TTS if ElevenLabs fails
-        fallbackTTS(text);
-    }
-}
 
-// Fallback to browser TTS (original function)
-function fallbackTTS(text) {
-    if (!('speechSynthesis' in window)) {
-        alert('Text-to-speech not available');
-        return;
-    }
-    
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.rate = 1.0;
-    utterance.pitch = 1.0;
-    utterance.volume = 1.0;
-    
-    // Try to find ABEO voice specifically
-    const voices = speechSynthesis.getVoices();
-    const abeoVoice = voices.find(voice => 
-        voice.name.includes('Abeo') || 
-        voice.name.includes('Nigeria') ||
-        voice.lang.includes('en-NG')
-    );
-    
-    if (abeoVoice) {
-        utterance.voice = abeoVoice;
-    }
-    
-    window.speechSynthesis.speak(utterance);
-}
         // Check backend connection
         async function checkBackendConnection() {
             try {
