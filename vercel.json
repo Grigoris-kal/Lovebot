@@ -24,6 +24,14 @@
       "dest": "/lovebot_backend.py"
     },
     {
+      "src": "/generate-speech",
+      "dest": "/lovebot_backend.py"
+    },
+    {
+      "src": "/debug-keys",
+      "dest": "/lovebot_backend.py"
+    },
+    {
       "src": "/(.*)",
       "dest": "/index.html"
     }
