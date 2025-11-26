@@ -12,8 +12,20 @@
   ],
   "routes": [
     {
-      "src": "/(.*)",
+      "src": "/",
+      "dest": "/index.html"
+    },
+    {
+      "src": "/health",
       "dest": "/lovebot_backend.py"
+    },
+    {
+      "src": "/chat",
+      "dest": "/lovebot_backend.py"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
     }
   ]
 }
