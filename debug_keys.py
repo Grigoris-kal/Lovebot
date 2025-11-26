@@ -3,7 +3,7 @@ import os
 import requests
 
 app = Flask(__name__)
-
+CORS(app)
 @app.route('/')
 def debug_keys():
     return jsonify({
