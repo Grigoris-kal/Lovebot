@@ -357,7 +357,7 @@ What romantic query shall we optimize today?</div>
         // Check backend connection
         async function checkBackendConnection() {
             try {
-                const response = await fetch('http://localhost:5000/health');
+                const response = await fetch('https://lovebot-xyh8.vercel.app/health');
                 const data = await response.json();
 
                 const statusElement = document.getElementById('backendStatus');
@@ -375,7 +375,7 @@ What romantic query shall we optimize today?</div>
         // Get AI response from Gemini
         async function getAIResponse(question) {
             try {
-                const response = await fetch('http://localhost:5000/chat', {
+                const response = await fetch('https://lovebot-xyh8.vercel.app/chat', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
