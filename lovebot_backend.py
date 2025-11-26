@@ -257,6 +257,13 @@ def clear_memory():
     global conversation_memory
     conversation_memory = {}
     return jsonify({"success": True, "message": "Memory cleared!"})
+    
+# === ADD THIS NEW ROUTE RIGHT HERE ===
+@app.route('/')
+def home():
+    return jsonify({"status": "Lovebot backend is running!", "message": "Use /chat endpoint for AI conversations"})
+# === END OF NEW ROUTE ===
 
 if __name__ == '__main__':
     app.run(debug=True, host='localhost', port=5000)
+
