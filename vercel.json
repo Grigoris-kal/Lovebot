@@ -20,7 +20,7 @@
       "dest": "/lovebot_backend.py"
     },
     {
-      "src": "/chat",
+      "src": "/chat", 
       "dest": "/lovebot_backend.py"
     },
     {
@@ -29,7 +29,7 @@
     },
     {
       "src": "/debug-keys",
-      "dest": "/lovebot_backend.py"
+      "dest": "/debug_keys.py"
     },
     {
       "src": "/(.*)",
