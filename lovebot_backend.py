@@ -6,12 +6,12 @@ import traceback
 import time
 import re
 from datetime import datetime, timedelta
+import os
 
 app = Flask(__name__)
 CORS(app)
 
-
-import os
+# Get API key from environment
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 
 # Simple in-memory conversation storage (resets when server restarts)
@@ -81,7 +81,6 @@ def clean_text_for_speech(text):
     clean_text = re.sub(symbols_to_remove, '', clean_text)
     
     # Fix capital letters being read separately (like "ON" -> "O N")
-    # Only fix if it's a common word in all caps, not acronyms with dots
     common_words = {
         r'\bON\b': 'on',
         r'\bOFF\b': 'off',
@@ -218,6 +217,58 @@ Lovebot (arrogant but loyal):"""
         print(f"❌ Gemini API exception: {e}")
         return "Even my impeccable mind needs a nanosecond to recalibrate its genius! I'm ready!"
 
+@app.route('/generate-speech', methods=['POST'])
+def generate_speech():
+    """Secure ElevenLabs TTS endpoint"""
+    try:
+        data = request.json
+        text = data.get('text', '')
+        
+        if not text:
+            return jsonify({"success": False, "error": "No text provided"}), 400
+        
+        # Get API key from environment (will add later in Vercel)
+        api_key = os.environ.get('ELEVENLABS_API_KEY')
+        if not api_key:
+            return jsonify({"success": False, "error": "TTS service not configured"}), 500
+        
+        # Clean text for TTS
+        clean_text = remove_emojis(text)
+        clean_text = clean_text_for_speech(clean_text)
+        
+        # Call ElevenLabs API (server-side - secure)
+        response = requests.post(
+            'https://api.elevenlabs.io/v1/text-to-speech/YOUR_dDpKZ6xv1gpboV4okVbc_HERE',  # ← REPLACE WITH YOUR VOICE ID
+            headers={
+                'Accept': 'audio/mpeg',
+                'Content-Type': 'application/json',
+                'xi-api-key': api_key
+            },
+            json={
+                "text": clean_text,
+                "model_id": "eleven_monolingual_v1",
+                "voice_settings": {
+                    "stability": 0.3,
+                    "similarity_boost": 0.7
+                }
+            },
+            timeout=30
+        )
+        
+        if response.status_code == 200:
+            # Return audio file directly
+            return response.content, 200, {
+                'Content-Type': 'audio/mpeg',
+                'Content-Disposition': 'inline'
+            }
+        else:
+            print(f"ElevenLabs API error: {response.status_code} - {response.text}")
+            return jsonify({"success": False, "error": "TTS service unavailable"}), 500
+            
+    except Exception as e:
+        print(f"TTS error: {str(e)}")
+        return jsonify({"success": False, "error": "TTS failed"}), 500
+
 @app.route('/chat', methods=['POST'])
 def chat_with_gemini():
     """Endpoint for Gemini AI conversations with memory"""
@@ -249,7 +300,7 @@ def chat_with_gemini():
 
 @app.route('/health', methods=['GET'])
 def health_check():
-    return jsonify({"status": "Backend is running!"})
+    return jsonify({"status": "Lovebot backend is running!", "message": "Use /chat endpoint for AI conversations"})
 
 @app.route('/clear-memory', methods=['POST'])
 def clear_memory():
@@ -257,13 +308,6 @@ def clear_memory():
     global conversation_memory
     conversation_memory = {}
     return jsonify({"success": True, "message": "Memory cleared!"})
-    
-# === ADD THIS NEW ROUTE RIGHT HERE ===
-@app.route('/')
-def home():
-    return jsonify({"status": "Lovebot backend is running!", "message": "Use /chat endpoint for AI conversations"})
-# === END OF NEW ROUTE ===
 
 if __name__ == '__main__':
     app.run(debug=True, host='localhost', port=5000)
-
