@@ -76,8 +76,6 @@ def clean_text_for_speech(text):
     
     clean_text = text
 
-
-    # 🆕 ADD THIS BLOCK RIGHT HERE 🆕
     # Fix "Hmmmmm" and similar hesitation sounds
     hesitation_words = {
         r'\b[Hh][Mm]+\b': 'hmm',           # Hmmmm → hmm
@@ -86,9 +84,7 @@ def clean_text_for_speech(text):
     
     for pattern, replacement in hesitation_words.items():
         clean_text = re.sub(pattern, replacement, clean_text)
-    # 🆕 END OF NEW CODE 🆕
     
-    # Continue with your existing code below...
     # Remove ALL symbols that TTS might read aloud
     symbols_to_remove = r'[*_~`@#$%^&+=|<>{}]'
     clean_text = re.sub(symbols_to_remove, '', clean_text)
@@ -240,7 +236,7 @@ def generate_speech():
         if not text:
             return jsonify({"success": False, "error": "No text provided"}), 400
         
-        # Get API key from environment (will add later in Vercel)
+        # Get API key from environment
         api_key = os.environ.get('ELEVENLABS_API_KEY')
         if not api_key:
             return jsonify({"success": False, "error": "TTS service not configured"}), 500
@@ -249,10 +245,9 @@ def generate_speech():
         clean_text = remove_emojis(text)
         clean_text = clean_text_for_speech(clean_text)
         
-        # Call ElevenLabs API (server-side - secure)
-        # Call ElevenLabs API (server-side - secure)
+        # Call ElevenLabs API with male voice
         response = requests.post(
-            'https://api.elevenlabs.io/v1/text-to-speech',  # ← REMOVED VOICE ID FROM URL
+            'https://api.elevenlabs.io/v1/text-to-speech/dDpKZ6xv1gpboV4okVbc',  # Male voice ID
             headers={
                 'Accept': 'audio/mpeg',
                 'Content-Type': 'application/json',
@@ -260,12 +255,11 @@ def generate_speech():
             },
             json={
                 "text": clean_text,
-                "model_id": "eleven_monolingual_v1",
+                "model_id": "eleven_multilingual_v2",  # Use multilingual model
                 "voice_settings": {
                     "stability": 0.3,
                     "similarity_boost": 0.7
-                },
-                "voice_id": "dDpKZ6xv1gpboV4okVbc"  # ← VOICE ID MOVED HERE
+                }
             },
             timeout=30
         )
@@ -326,7 +320,3 @@ def clear_memory():
 
 if __name__ == '__main__':
     app.run(debug=True, host='localhost', port=5000)
-
-
-
-
