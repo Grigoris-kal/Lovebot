@@ -235,7 +235,6 @@
 <body>
     <div class="container">
         <header>
-            <!-- FIXED: Remove ./ for Vercel paths -->
             <img src="https://raw.githubusercontent.com/Grigoris-kal/Lovebot/main/Love_bot_logo.jpg" alt="Lovebot Logo" class="logo">
             <h1>Lovebot</h1>
             <p class="tagline">Your AI-powered relationship assistant</p>
@@ -246,9 +245,7 @@
         </div>
 
         <div class="car-section">
-            <!-- FIXED: Remove ./ for Vercel paths -->
             <img src="https://raw.githubusercontent.com/Grigoris-kal/Lovebot/main/your_car_image.jpg" alt="Lovebot Car" class="car-image">
-            <!-- Rest of your HTML... -->
             <div class="chat-container">
                 <div class="input-box">
                     <h3>Your Question</h3>
@@ -346,15 +343,18 @@ What romantic query shall we optimize today?</div>
             
             const utterance = new SpeechSynthesisUtterance(text);
             utterance.rate = 1.0;
-            utterance.pitch = 1.0;
+            utterance.pitch = 0.8;
             utterance.volume = 1.0;
             
             // Try to find ABEO voice specifically
             const voices = speechSynthesis.getVoices();
             const abeoVoice = voices.find(voice => 
-                voice.name.includes('Abeo') || 
-                voice.name.includes('Nigeria') ||
-                voice.lang.includes('en-NG')
+                voice.name.includes('Male') || 
+                voice.name.includes('Man') ||
+                voice.name.includes('David') ||
+                voice.name.includes('Google UK English Male') ||
+                voice.name.includes('Microsoft David') ||
+                voice.lang.includes('en-GB')  // British male often available
             );
             
             if (abeoVoice) {
