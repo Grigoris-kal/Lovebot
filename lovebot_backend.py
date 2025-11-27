@@ -75,7 +75,20 @@ def clean_text_for_speech(text):
     }
     
     clean_text = text
+
+
+    # 🆕 ADD THIS BLOCK RIGHT HERE 🆕
+    # Fix "Hmmmmm" and similar hesitation sounds
+    hesitation_words = {
+        r'\b[Hh][Mm]+\b': 'hmm',           # Hmmmm → hmm
+        r'\b[Mm]+\b': 'hmm',               # Mmmm → hmm  
+    }
     
+    for pattern, replacement in hesitation_words.items():
+        clean_text = re.sub(pattern, replacement, clean_text)
+    # 🆕 END OF NEW CODE 🆕
+    
+    # Continue with your existing code below...
     # Remove ALL symbols that TTS might read aloud
     symbols_to_remove = r'[*_~`@#$%^&+=|<>{}]'
     clean_text = re.sub(symbols_to_remove, '', clean_text)
@@ -313,6 +326,7 @@ def clear_memory():
 
 if __name__ == '__main__':
     app.run(debug=True, host='localhost', port=5000)
+
 
 
 
