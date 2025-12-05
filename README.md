@@ -18,25 +18,19 @@ In addition to Lovebot's embedded insanity, it also comes with an extensive know
 - **Animal courtship rituals** (turns out the wild kingdom has some flirting rituals that are just...wild!)
 - **Romantic poetry** centuries of romantic literature (uses sonnets as pickup lines)
 
+## Project Libraries
 
-📘 Libraries Used
-🐍 Flask – lightweight web framework for building APIs and web apps.
+This project uses the following Python libraries:
 
-🌐 Flask‑CORS – enables Cross‑Origin Resource Sharing (CORS) so your API can be accessed from browsers on different domains.
-
-🔗 requests – makes HTTP requests to external APIs or services.
-
-📄 json – handles JSON encoding/decoding for structured data exchange.
-
-🛠️ traceback – provides detailed error stack traces for debugging.
-
-⏱️ time – offers time‑related functions like delays and timestamps.
-
-✏️ re – regular expressions for pattern matching and text processing.
-
-📆 datetime, timedelta – manage dates, times, and intervals (e.g., scheduling, logging).
-
-💻 os – interact with the operating system (file paths, environment variables).
+- 🐍 Flask – lightweight web framework for building APIs and web apps.
+- 🌐 Flask-CORS – enables Cross-Origin Resource Sharing (CORS) so your API can be accessed from browsers on different domains.
+- 🔗 requests – makes HTTP requests to external APIs or services.
+- 📄 json – handles JSON encoding/decoding for structured data exchange.
+- 🛠️ traceback – provides detailed error stack traces for debugging.
+- ⏱️ time – offers time-related functions like delays and timestamps.
+- ✏️ re – regular expressions for pattern matching and text processing.
+- 📆 datetime, timedelta – manage dates, times, and intervals (e.g., scheduling, logging).
+- 💻 os – interact with the operating system (file paths, environment variables).
 
 ## Powered by Python/Gemini, but Driven by Ego
 
