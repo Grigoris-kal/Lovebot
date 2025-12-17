@@ -7,9 +7,12 @@ import time
 import re
 from datetime import datetime, timedelta
 import os
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 
 app = Flask(__name__)
 CORS(app)
+limiter = Limiter(get_remote_address, app=app, default_limits=["60 per minute"])
 
 # Get API key from environment
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
@@ -279,6 +282,8 @@ def generate_speech():
         return jsonify({"success": False, "error": "TTS failed"}), 500
 
 @app.route('/chat', methods=['POST'])
+@limiter.limit("60 per minute")
+
 def chat_with_gemini():
     """Endpoint for Gemini AI conversations with memory"""
     try:
@@ -320,3 +325,4 @@ def clear_memory():
 
 if __name__ == '__main__':
     app.run(debug=True, host='localhost', port=5000)
+
