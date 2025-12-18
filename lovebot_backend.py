@@ -169,7 +169,7 @@ def get_gemini_response(user_message, session_id="default"):
             conversation_context += f"User: {exchange['user']}\n"
             conversation_context += f"Lovebot: {exchange['bot']}\n\n"
         
-        url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={GEMINI_API_KEY}"
+        url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={GEMINI_API_KEY}"
         
         payload = {
             "contents": [{
@@ -326,5 +326,6 @@ def clear_memory():
 
 if __name__ == '__main__':
     app.run(debug=True, host='localhost', port=5000)
+
 
 
