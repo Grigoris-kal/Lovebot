@@ -242,6 +242,9 @@ Previous conversation context:
     except Exception as e:
         print(f"❌ GROQ API FAILED - Status: {response.status_code if 'response' in locals() else 'NO RESPONSE'}, Error: {e}")
         return "Even my impeccable mind needs a nanosecond to recalibrate its genius! I'm ready!"
+
+
+@app.route('/generate-speech', methods=['POST'])
 def generate_speech():
     """Secure ElevenLabs TTS endpoint"""
     try:
@@ -337,6 +340,7 @@ def clear_memory():
 
 if __name__ == '__main__':
     app.run(debug=True, host='localhost', port=5000)
+
 
 
 
