@@ -405,40 +405,44 @@ What romantic query shall we optimize today?</div>
                 return "I apologize, but my brilliant AI systems are currently optimizing themselves! Even genius needs occasional maintenance!";
             }
         }
+        
 
         // Response simulation with API call
-        document.querySelector('.submit-button').addEventListener('click', async function() {
-            const questionInput = document.querySelector('.question-input');
-            const responseDisplay = document.querySelector('.response-display');
-            const loadingIndicator = document.getElementById('loadingIndicator');
-            const question = questionInput.value.trim();
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelector('.submit-button').addEventListener('click', async function() {
+                const questionInput = document.querySelector('.question-input');
+                const responseDisplay = document.querySelector('.response-display');
+                const loadingIndicator = document.getElementById('loadingIndicator');
+                const question = questionInput.value.trim();
 
-            if (question === '') {
-                responseDisplay.textContent = "Please ask me a question about love or relationships! Even my brilliant mind needs something to work with!";
-                return;
-            }
+                if (question === '') {
+                    responseDisplay.textContent = "Please ask me a question about love or relationships! Even my brilliant mind needs something to work with!";
+                    return;
+                }
 
-            // Show loading indicator
-            loadingIndicator.style.display = 'block';
-            this.disabled = true;
+                // Show loading indicator
+                loadingIndicator.style.display = 'block';
+                this.disabled = true;
 
-            try {
-                // Get AI response from Gemini
-                const response = await getAIResponse(question);
-                responseDisplay.textContent = response;
+                try {
+                    // Get AI response from Gemini
+                    const response = await getAIResponse(question);
+                    responseDisplay.textContent = response;
 
-                // Clear the input
-                questionInput.value = '';
-            } catch (error) {
-                responseDisplay.textContent = "I apologize, but my genius systems are currently optimizing themselves! Even brilliance needs occasional maintenance!";
-                console.error("API Error:", error);
-            } finally {
-                // Hide loading indicator
-                loadingIndicator.style.display = 'none';
-                this.disabled = false;
-            }
+                    // Clear the input
+                    questionInput.value = '';
+                } catch (error) {
+                    responseDisplay.textContent = "I apologize, but my genius systems are currently optimizing themselves! Even brilliance needs occasional maintenance!";
+                    console.error("API Error:", error);
+                } finally {
+                    // Hide loading indicator
+                    loadingIndicator.style.display = 'none';
+                    this.disabled = false;
+                }
+            });
         });
 
+        
         // Manual speak button
         document.querySelector('.speak-button').addEventListener('click', function() {
             const responseDisplay = document.querySelector('.response-display');
