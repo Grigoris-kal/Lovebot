@@ -159,6 +159,8 @@ def update_conversation_history(session_id, user_message, bot_response):
 
 def get_groq_response(user_message, session_id="default"):
     """Get AI response from Groq with ARROGANT but LOYAL personality"""
+    print(f"🔍 ENV CHECK: GROQ_API_KEY = '{os.environ.get('GROQ_API_KEY')}'") 
+    
     try:
         # Get conversation history
         history = get_conversation_history(session_id)
@@ -335,6 +337,7 @@ def clear_memory():
 
 if __name__ == '__main__':
     app.run(debug=True, host='localhost', port=5000)
+
 
 
 
