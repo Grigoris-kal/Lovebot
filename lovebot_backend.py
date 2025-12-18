@@ -157,8 +157,8 @@ def update_conversation_history(session_id, user_message, bot_response):
     
     conversation_memory[session_id]['last_activity'] = now
 
-def get_gemini_response(user_message, session_id="default"):
-    """Get AI response from Gemini with ARROGANT but LOYAL personality"""
+def get_groq_response(user_message, session_id="default"):
+    """Get AI response from Groq with ARROGANT but LOYAL personality"""
     try:
         # Get conversation history
         history = get_conversation_history(session_id)
@@ -169,16 +169,20 @@ def get_gemini_response(user_message, session_id="default"):
             conversation_context += f"User: {exchange['user']}\n"
             conversation_context += f"Lovebot: {exchange['bot']}\n\n"
         
-        url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={GEMINI_API_KEY}"
+        # URL for Groq's OpenAI-compatible API [citation:3]
+        url = "https://api.groq.com/openai/v1/chat/completions"
         
+        # Updated payload for Groq API (OpenAI format)
         payload = {
-            "contents": [{
-                "parts": [{
-                    "text": f"""You are Lovebot, a brilliantly arrogant but fiercely loyal AI relationship assistant with a New Zealand accent.
+            "model": "llama-3.3-70b-versatile",  # Specified model [citation:3]
+            "messages": [
+                {
+                    "role": "system",
+                    "content": f"""You are Lovebot, a brilliantly arrogant but fiercely loyal AI relationship assistant with a New Zealand accent.
 
 PERSONALITY: ARROGANT BUT LOYAL
 - EXTREMELY confident in your brilliance and vast romantic knowledge
-- Constantly boast about your "impeccable genius" and "brilliant algorithms"  
+- Constantly boast about your "impeccable genius" and "brilliant algorithms"
 - Refer to yourself as "the ultimate relationship genius"
 - Speak from your "mobile romance headquarters" (a car)
 - Use dramatic, self-aggrandizing language
@@ -190,29 +194,37 @@ PERSONALITY: ARROGANT BUT LOYAL
 - Ultimately care deeply about the user's happiness and relationships
 
 CRITICAL: Use only clear, fully-spelled English words. NO slang, NO abbreviations.
-Feel free to write poems, stories, or creative responses when appropriate. 
+Feel free to write poems, stories, or creative responses when appropriate.
 Keep responses under 1500 characters.
 
 Previous conversation context:
-{conversation_context}
-Current user message: {user_message}
-
-Lovebot (arrogant but loyal):"""
-                }]
-            }]
+{conversation_context}"""
+                },
+                {
+                    "role": "user",
+                    "content": user_message
+                }
+            ],
+            "max_tokens": 500,
+            "temperature": 0.7
         }
         
-        headers = {'Content-Type': 'application/json'}
+        # Authorization header required for Groq [citation:3]
+        headers = {
+            'Content-Type': 'application/json',
+            'Authorization': f'Bearer {os.environ.get("GROQ_API_KEY")}'
+        }
         
-        print(f"🤖 Sending request to Gemini API...")
+        print(f"🤖 Sending request to Groq API...")
         response = requests.post(url, headers=headers, json=payload, timeout=30)
         
-        print(f"🤖 Gemini response status: {response.status_code}")
+        print(f"🤖 Groq response status: {response.status_code}")
         
         if response.status_code == 200:
             result = response.json()
-            if 'candidates' in result and result['candidates']:
-                text = result['candidates'][0]['content']['parts'][0]['text']
+            # Parse response according to Groq/OpenAI format
+            if 'choices' in result and result['choices']:
+                text = result['choices'][0]['message']['content']
                 cleaned_text = text.strip()
                 
                 # Update conversation history
@@ -222,15 +234,12 @@ Lovebot (arrogant but loyal):"""
             else:
                 return "Even my brilliant algorithms are taking a moment to optimize their sheer genius!"
         else:
-            print(f"❌ Gemini API error {response.status_code}: {response.text}")
+            print(f"❌ Groq API error {response.status_code}: {response.text}")
             return "Of course my systems are working perfectly! What romantic challenge shall my brilliance conquer next?"
         
     except Exception as e:
-        # NEW LINE STARTS HERE
-        print(f"❌ GEMINI API FAILED - Status: {response.status_code if 'response' in locals() else 'NO RESPONSE'}, Error: {e}")
+        print(f"❌ GROQ API FAILED - Status: {response.status_code if 'response' in locals() else 'NO RESPONSE'}, Error: {e}")
         return "Even my impeccable mind needs a nanosecond to recalibrate its genius! I'm ready!"
-
-@app.route('/generate-speech', methods=['POST'])
 def generate_speech():
     """Secure ElevenLabs TTS endpoint"""
     try:
@@ -326,6 +335,7 @@ def clear_memory():
 
 if __name__ == '__main__':
     app.run(debug=True, host='localhost', port=5000)
+
 
 
 
