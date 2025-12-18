@@ -226,7 +226,8 @@ Lovebot (arrogant but loyal):"""
             return "Of course my systems are working perfectly! What romantic challenge shall my brilliance conquer next?"
         
     except Exception as e:
-        print(f"❌ Gemini API exception: {e}")
+        # NEW LINE STARTS HERE
+        print(f"❌ GEMINI API FAILED - Status: {response.status_code if 'response' in locals() else 'NO RESPONSE'}, Error: {e}")
         return "Even my impeccable mind needs a nanosecond to recalibrate its genius! I'm ready!"
 
 @app.route('/generate-speech', methods=['POST'])
@@ -325,4 +326,5 @@ def clear_memory():
 
 if __name__ == '__main__':
     app.run(debug=True, host='localhost', port=5000)
+
 
