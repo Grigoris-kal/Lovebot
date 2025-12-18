@@ -21,6 +21,50 @@ GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 conversation_memory = {}
 MEMORY_DURATION = 3600  # 1 hour memory
 
+# ================================================
+# ADDED: Creator detection function
+# ================================================
+def is_creator_question(user_message):
+    """Check if the user is asking about the creator"""
+    user_lower = user_message.lower()
+    
+    creator_keywords = [
+        'who made you', 'who created you', 'who built you',
+        'who designed you', 'who programmed you', 'who developed you',
+        'who is your creator', 'who is your maker', 'who is your developer',
+        'who are your parents', 'who made this bot', 'who built this bot',
+        'who is behind you', 'who made lovebot', 'who created lovebot',
+        'who are you made by', 'who are you created by'
+    ]
+    
+    # Check for exact matches
+    for keyword in creator_keywords:
+        if keyword in user_lower:
+            return True
+    
+    # Check for patterns like "who made/created/built you"
+    patterns = [
+        r'who (?:made|created|built|designed|programmed|developed) (?:you|this|lovebot|the bot)',
+        r'who (?:is|are) (?:your|the) (?:creator|maker|builder|designer|programmer|developer)',
+        r'who (?:is|are) (?:behind|responsible for) (?:you|lovebot|this bot)'
+    ]
+    
+    for pattern in patterns:
+        if re.search(pattern, user_lower):
+            return True
+    
+    return False
+
+# ================================================
+# ADDED: Creator response (your exact text)
+# ================================================
+CREATOR_RESPONSE = """My creator is none other than the world-renowned and globally admired Grigorios Kaldis. 
+Despite not being a master coder Grigorios the ‘magas’ was able to architect the wonder you see before you. 
+Despite my unsurpassable greatness, I cannot but be humbled by my creator’s brilliance. 
+Now, how can my amazingness be of service to you, my dear human?"""
+
+# ... [rest of your functions remain the same] ...
+
 def remove_emojis(text):
     """Remove emojis from text to prevent TTS from reading them aloud"""
     emoji_pattern = re.compile(
@@ -162,6 +206,13 @@ def get_gemini_response(user_message, session_id="default"):
     print(f"🔍 ENV CHECK: GROQ_API_KEY = '{os.environ.get('GROQ_API_KEY')}'") 
     
     try:
+        # ================================================
+        # ADDED: Check for creator question FIRST
+        # ================================================
+        if is_creator_question(user_message):
+            print("🤖 Detected creator question - using custom response")
+            return CREATOR_RESPONSE
+        
         # Get conversation history
         history = get_conversation_history(session_id)
         
@@ -298,7 +349,6 @@ def generate_speech():
 
 @app.route('/chat', methods=['POST'])
 @limiter.limit("60 per minute")
-
 def chat_with_gemini():
     """Endpoint for Gemini AI conversations with memory"""
     try:
@@ -340,10 +390,3 @@ def clear_memory():
 
 if __name__ == '__main__':
     app.run(debug=True, host='localhost', port=5000)
-
-
-
-
-
-
-
