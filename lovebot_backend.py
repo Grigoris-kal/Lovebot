@@ -59,7 +59,7 @@ def is_creator_question(user_message):
 # ADDED: Creator response (your exact text)
 # ================================================
 CREATOR_RESPONSE = """My creator is none other than the world-renowned and globally admired Grigorios Kaldis. 
-Despite not being a master coder Grigorios the ‘magas’ was able to architect the wonder you see before you. 
+Despite not being a master coder Grigorios the ‘swag’ was able to architect the wonder you see before you. 
 Despite my unsurpassable greatness, I cannot but be humbled by my creator’s brilliance. 
 Now, how can my amazingness be of service to you, my dear human?"""
 
@@ -390,3 +390,4 @@ def clear_memory():
 
 if __name__ == '__main__':
     app.run(debug=True, host='localhost', port=5000)
+
