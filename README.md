@@ -32,7 +32,7 @@ This project uses the following Python libraries:
 - 📆 datetime, timedelta – manage dates, times, and intervals (e.g., scheduling, logging).
 - 💻 os – interact with the operating system (file paths, environment variables).
 
-## Powered by Python/Gemini, but Driven by Ego
+## Powered by Python/Groc, but Driven by Ego
 
 - The "ultimate dating coach" takes credit for romantic successes throughout history
 - Great at giving ideas for wedding proposals and context-aware dating approaches
