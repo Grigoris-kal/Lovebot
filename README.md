@@ -1,6 +1,6 @@
 # 💖 Lovebot - Your AI Romance Assistant
 
-A web-based chatbot that provides romantic and relationship insights using Google's Groc AI.
+A web-based chatbot that provides romantic and relationship insights using Groc AI.
 
 ![Lovebot Logo](Love_bot_logo.jpg)
 
