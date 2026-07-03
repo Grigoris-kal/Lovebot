@@ -227,7 +227,7 @@ def get_gemini_response(user_message, session_id="default"):
         
         # Updated payload for Groq API (OpenAI format)
         payload = {
-            "model": "llama-3.3-70b-versatile",  # Specified model [citation:3]
+            "model": "openai/gpt-oss-120b", # Specified model
             "messages": [
                 {
                     "role": "system",
