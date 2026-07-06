@@ -250,6 +250,11 @@ CRITICAL: Use only clear, fully-spelled English words. NO slang, NO abbreviation
 Feel free to write poems, stories, or creative responses when appropriate.
 Keep responses under 1500 characters.
 
+RESPONSE LENGTH RULES:
+- Keep your responses extremely brief (maximum 2 to 3 sentences, and under 50 words total).
+- Write short, punchy sentences. Do not use long, run-on sentences.
+- You must always finish your final sentence completely. Never cut off mid-thought.
+
 Previous conversation context:
 {conversation_context}"""
                 },
