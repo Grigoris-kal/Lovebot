@@ -258,7 +258,7 @@ Previous conversation context:
                     "content": user_message
                 }
             ],
-            "max_tokens": 500,
+            "max_tokens": 130,
             "temperature": 0.7
         }
         
